@@ -1,0 +1,30 @@
+library(tidyverse)
+#library(ggmap)
+library(dplyr, warn.conflicts = FALSE)
+library(tidygeocoder)
+library(leaflet)
+
+#read the data
+data <- read_csv("test.csv")
+
+#convert the data to a dataframe
+addr <- as.data.frame(data)
+
+
+#Here use the pygeocoder library to geocode the dataframe
+#The second line of the function specifies the address fields
+#create new columns for latitude and longitude values, use the osm method
+#Geocode
+
+lat_longs <- addr %>%
+  geocode(author_location, method = 'osm', lat = latitude , long = longitude , full_results = TRUE)
+
+#remove null values
+new_DF<-subset(lat_longs, lat_longs$latitude!="")
+
+#Plots the data using leaflets to check
+m <- leaflet(new_DF) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers(lng=new_DF$longitude, lat=new_DF$latitude, clusterOptions = markerClusterOptions())
+m  # Print the map
+
