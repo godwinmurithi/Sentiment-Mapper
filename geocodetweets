@@ -1,3 +1,4 @@
+#LOAD relevant libraries
 library(tidyverse)
 #library(ggmap)
 library(dplyr, warn.conflicts = FALSE)
@@ -21,6 +22,9 @@ lat_longs <- addr %>%
 
 #remove null values
 new_DF<-subset(lat_longs, lat_longs$latitude!="")
+
+#save as a csv file
+write.csv(new_DF, file = "new_DF.csv")
 
 #Plots the data using leaflets to check
 m <- leaflet(new_DF) %>%
