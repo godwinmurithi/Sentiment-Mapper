@@ -1,1 +1,2 @@
-# tweeterapp-
+# tweeterapp
+This is is a project to access twitter data via the twitter v2 API as well as show you how to analyze social media data. For demonstration purposes we are looking at tweets sent Kenyans on twitter -- using a query related to the general election 2022. We conduct various temporal analyses of the Twitter data. Essentially, we will be taking the tweet-level data and aggregating to the account level.
