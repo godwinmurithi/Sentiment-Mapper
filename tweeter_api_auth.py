@@ -10,10 +10,10 @@ from collections import Counter
 import csv #Import csv
 
 # set auth
-consumer_key = "Rf2lHuEL74VytBbtJUAyeVNd1"
-consumer_secret = "PXxmvaVZIvH7bzeDLgbWwif4NyLXWk4gpMAimUG3kpOxr2wdQz"
-access_token = "964974181493428224-e93mZvsj58u4V6vOLwfD8qr4vhSX7os"
-access_token_secret = "aQnoPNbFTU9RAILtKMXjUc0rhfnvSD1TmfFGxhkcahYDB"
+consumer_key = "##"
+consumer_secret = "##"
+access_token = "##"
+access_token_secret = "##"
 
 auth = tweepy.OAuth1UserHandler(
     consumer_key, consumer_secret, access_token, access_token_secret
