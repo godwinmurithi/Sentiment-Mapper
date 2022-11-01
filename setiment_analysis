@@ -1,0 +1,61 @@
+import pandas as pd 
+import re
+import numpy as np
+from textblob import TextBlob
+import matplotlib.pyplot as plt
+plt.style.use('fivethirtyeight')
+
+
+#clean the tweets
+def cleantwts(twt):
+    twt = re.sub('https?:\/\/\S+','',twt)
+    twt = re.sub('rt','',twt)
+    twt = re.sub('#[A-Za-z0-9]+','',twt)
+    twt = re.sub('@[A-Za-z0-9]+','',twt)
+    twt = re.sub('RT','',twt)
+    twt = re.sub('//n','',twt)
+    return twt
+
+df = pd.read_csv("Kenya_tweets_00000.csv")
+
+df["cleaned_twts"] = df["text"].apply(cleantwts)
+
+
+#create function to get the subjectivity
+def getSubjectivity(twt):
+    return TextBlob(twt).sentiment.subjectivity
+#create function to get the polarity
+def getPolarity(twt):
+    return TextBlob(twt).sentiment.polarity
+#Create two columns for saving the results 
+df['subjectivity'] = df['cleaned_twts'].apply(getSubjectivity)
+df['polarity'] = df['cleaned_twts'].apply(getPolarity)
+
+#Create a function to get the text sentiment
+def getSentiment(score):
+    if score < 0:
+        return 'Negative'
+    elif score == 0:
+        return 'Neutral'
+    else:
+        return 'Positive'
+#Create a columns to save the text sentiment
+df['sentiment'] = df['polarity'].apply(getSentiment)
+
+#Create a scatterplot to show the subjectivity and polarity of the tweets
+plt.figure(figsize=(8,6))
+for i in range(0, df.shape[0]):
+    plt.scatter(df['polarity'][i], df['subjectivity'][i], color='purple')
+plt.title('Sentiment analysis scatter plot')
+plt.xlabel('polarity')
+plt.ylabel('subjectivity')
+plt.show()
+
+#Create a bar plot of the positive, neutral, and negative sentiments
+df['sentiment'].value_counts().plot(kind='bar')
+plt.title('Sentiment analysis bar plot')
+plt.xlabel('Sentiment')
+plt.ylabel('Number of Tweets')
+plt.show()
+
+pd.to_csv("twitter_sentiments.csv")
