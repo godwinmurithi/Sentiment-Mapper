@@ -1,34 +1,19 @@
-#LOAD relevant libraries
-library(tidyverse)
-#library(ggmap)
 library(dplyr, warn.conflicts = FALSE)
 library(tidygeocoder)
-library(leaflet)
 
-#read the data
-data <- read_csv("test.csv")
+# Read the data
+data <- read.csv("/home/godwin/Desktop/Geopsy/Geocoding/Accidents_Database - 2017.csv")
 
-#convert the data to a dataframe
+# Convert the data to a dataframe
 addr <- as.data.frame(data)
 
+# Geocode using the osm method
+geocoded_data <- addr %>%
+  geocode(address = PLACE, method = 'osm', lat = "latitude", long = "longitude")
 
-#Here use the pygeocoder library to geocode the dataframe
-#The second line of the function specifies the address fields
-#create new columns for latitude and longitude values, use the osm method
-#Geocode
+# Filter out rows with missing latitude or longitude
+geocoded_data <- geocoded_data %>% filter(!is.na(latitude) & !is.na(longitude))
 
-lat_longs <- addr %>%
-  geocode(author_location, method = 'osm', lat = latitude , long = longitude , full_results = TRUE)
-
-#remove null values
-new_DF<-subset(lat_longs, lat_longs$latitude!="")
-
-#save as a csv file
-write.csv(new_DF, file = "new_DF.csv")
-
-#Plots the data using leaflets to check
-m <- leaflet(new_DF) %>%
-  addTiles() %>%  # Add default OpenStreetMap map tiles
-  addCircleMarkers(lng=new_DF$longitude, lat=new_DF$latitude, clusterOptions = markerClusterOptions())
-m  # Print the map
+# Save as a CSV file
+write.csv(geocoded_data, "/home/godwin/Desktop/Geopsy/Geocoding/Accidents_Database_2017_Geocoded.csv", row.names = FALSE)
 
